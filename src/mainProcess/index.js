@@ -1,5 +1,7 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const minWidth = 1000;
+const minHeight = 600;
 // const httpServer = require('./http-server');
 
 // httpServer('../rendererProcess/windows/main', 8085);
@@ -12,26 +14,38 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: minWidth,
+    height: minHeight,
     icon: path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png'),
-    // frame: false,
+    frame: false,
     webPreferences: {
+      scrollBounce: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
   });
 
-  // Object.values((await (new JSZip()).loadAsync($0.files[0])).files)[0]
-
   // mainWindow.loadFile(path.join(__dirname, 'index.html'));
   mainWindow.loadURL("http://localhost:8080/#/editor");
   mainWindow.menuBarVisible = false;
   mainWindow.setBackgroundColor('#009688');
+  mainWindow.setMinimumSize(minWidth, minHeight)
   mainWindow.maximize();
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  // set id to random float
+  mainWindow.id = Math.random()
+  // handle minimize and maximize
+  ipcMain.on('minimize', e => BrowserWindow.fromId(e.sender.id).minimize())
+  ipcMain.on('maximize', e => {
+    const win = BrowserWindow.fromId(e.sender.id)
+    if(win.isMaximized()){
+      win.unmaximize()
+      win.setSize(minWidth, minHeight, true)
+    } else win.maximize()
+  })
+  // end open window function
 };
 
 // This method will be called when Electron has finished
