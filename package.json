@@ -2,16 +2,23 @@
   "name": "media-bits",
   "productName": "media-bits",
   "version": "1.0.0",
-  "description": "My Electron application description",
-  "main": "src/index.js",
+  "description": "Crossplatform Desktop app for Media-Bits",
+  "main": "src/mainProcess/index.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "echo \"No linting configured\"",
+    "electron": "electron"
   },
-  "keywords": [],
+  "keywords": [
+    "Video",
+    "Audio",
+    "Project",
+    "Edit",
+    "Stream"
+  ],
   "author": "danroyal001",
   "license": "MIT",
   "config": {
