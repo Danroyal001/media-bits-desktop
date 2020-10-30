@@ -19,7 +19,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-      preload: path.join(__dirname, '..', 'rendererProcess', 'index.js')
+      preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
   });
 
