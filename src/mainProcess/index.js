@@ -33,7 +33,7 @@ const createWindow = () => {
   mainWindow.setMinimumSize(minWidth, minHeight)
   mainWindow.maximize();
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
   // set id to random float
   mainWindow.id = Math.random()
   // handle minimize and maximize
