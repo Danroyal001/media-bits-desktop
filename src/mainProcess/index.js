@@ -68,13 +68,13 @@ app.on('ready', () => {
       }
     },
     {
-      label: 'Quit/Close',
+      label: 'Quit / Exit',
       click: () => {
         app.quit();
         }
       }
   ])
-  appTrayIcon.setToolTip('Electron Demo in the tray.')
+  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, editing and video conferencing')
   appTrayIcon.setContextMenu(contextMenu)
   });
 
