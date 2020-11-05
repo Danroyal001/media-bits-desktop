@@ -9,7 +9,7 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "make": "electron-forge make",
-    "package": "electron-forge package --overwrite",
+    "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "publish": "electron-forge publish",

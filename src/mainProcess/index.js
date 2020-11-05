@@ -39,6 +39,8 @@ const createWindow = () => {
   });
 
   // mainWindow.loadFile(path.join(__dirname, 'index.html'));
+  // dist: 5555
+  // ev: 8080
   mainWindow.loadURL("http://localhost:5555/#/editor");
   // set id to random float
   const id = Math.random();
