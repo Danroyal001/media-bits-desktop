@@ -74,7 +74,7 @@ app.on('ready', () => {
         }
       }
   ])
-  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, editing and video conferencing')
+  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, projection, editing and video conferencing')
   appTrayIcon.setContextMenu(contextMenu)
   });
 

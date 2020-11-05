@@ -1,7 +1,7 @@
 {
   "name": "media-bits",
   "version": "1.0.0",
-  "description": "Crossplatform Desktop app for Media-Bits",
+  "description": "Crossplatform Desktop app for Media-Bits - Next generation media streaming, projection, editing and video conferencing",
   "author": "danroyal001",
   "scripts": {
     "lint": "echo \"No linting configured\"",
@@ -9,7 +9,7 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "make": "electron-forge make",
-    "package": "electron-forge package",
+    "package": "electron-forge package --overwrite",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "publish": "electron-forge publish",
