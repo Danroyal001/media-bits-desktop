@@ -53,7 +53,8 @@ module.exports = exports = (_path, _port) => {
          'Content-Type': contentType,
          'Access-Control-Allow-Origin': '*'
         });
-     res.end(content, 'utf-8');
+     res.write(content, 'utf-8');
+     res.end();
      }
     });
     }).listen(_port, '127.0.0.1', ()=>console.log(`Server running at http://127.0.0.1:${_port}/`));

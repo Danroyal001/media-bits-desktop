@@ -1,12 +1,12 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, desktopCapturer } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, desktopCapturer, shell } = require('electron');
 const path = require('path');
 const minWidth = 1000;
 const minHeight = 600;
 let appTrayIcon = null;
 const iconPath = path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png');
-// const httpServer = require('./http-server');
+const httpServer = require('./http-server');
 
-// httpServer('../rendererProcess/windows/main', 8085);
+httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), 5555);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -39,7 +39,7 @@ const createWindow = () => {
   });
 
   // mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.loadURL("http://localhost:8080/#/editor");
+  mainWindow.loadURL("http://localhost:5555/#/editor");
   // set id to random float
   const id = Math.random();
   mainWindow.id = id;
@@ -63,13 +63,19 @@ app.on('ready', () => {
   const contextMenu = Menu.buildFromTemplate([
     {
     label: 'New Window',
-    click: () => {
+    click(){
       createWindow();
       }
     },
     {
+      label: 'Go to Website',
+      click(){
+        shell.openExternal('https://media-bits.web.app')
+      }
+    },
+    {
       label: 'Quit / Exit',
-      click: () => {
+      click(){
         app.quit();
         }
       }
