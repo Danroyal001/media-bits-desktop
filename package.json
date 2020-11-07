@@ -8,7 +8,7 @@
     "electron": "electron",
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
-    "make": "electron-forge make",
+    "make": "electron-forge make --arch=x64",
     "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
