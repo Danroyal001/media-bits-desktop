@@ -16,7 +16,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 // handle minimize and maximize
 ipcMain.on('minimize', e => BrowserWindow.fromId(e.sender.id).minimize())
 ipcMain.on('maximize', e => {
-  const win = BrowserWindow.fromId(e.sender.id)
+  const win = BrowserWindow.getFocusedWindow() || BrowserWindow.fromId(e.sender.id)
   if(win.isMaximized()){
     win.unmaximize()
     win.setSize(minWidth, minHeight, true)
@@ -63,15 +63,28 @@ app.on('ready', () => {
   appTrayIcon = new Tray(iconPath);
   const contextMenu = Menu.buildFromTemplate([
     {
+      label: "Media-Bits",
+      click(){
+        return BrowserWindow.getAllWindows()[0].focus();
+      }
+    },
+    {
     label: 'New Window',
     click(){
-      createWindow();
+      return createWindow();
       }
     },
     {
       label: 'Go to Website',
       click(){
-        shell.openExternal('https://media-bits.web.app')
+        return shell.openExternal('https://media-bits.web.app')
+      }
+    },
+    {
+      label: "Relaunch",
+      click(){
+        app.relaunch()
+        return app.quit();
       }
     },
     {
@@ -81,8 +94,8 @@ app.on('ready', () => {
         }
       }
   ])
-  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, projection, editing and video conferencing')
-  appTrayIcon.setContextMenu(contextMenu)
+  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, projection, editing and video conferencing');
+  appTrayIcon.setContextMenu(contextMenu);
   });
 
 // Quit when all windows are closed, except on macOS. There, it's common
