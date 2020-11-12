@@ -6,8 +6,6 @@
   "scripts": {
     "lint": "echo \"No linting configured\"",
     "electron": "electron",
-    "electron:build": "vue-cli-service electron:build",
-    "electron:serve": "vue-cli-service electron:serve",
     "make": "electron-forge make --arch=x64",
     "package": "electron-forge package",
     "postinstall": "electron-builder install-app-deps",
@@ -17,7 +15,9 @@
   },
   "main": "src/mainProcess/index.js",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-log": "^4.3.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "update-electron-app": "^2.0.1"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
@@ -30,31 +30,7 @@
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.5"
   },
   "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "media_bits"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+    "forge": "./forge.config.js"
   },
   "keywords": [
     "Video",

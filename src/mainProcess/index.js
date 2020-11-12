@@ -75,6 +75,10 @@ app.on('ready', () => {
       }
     },
     {
+      type: "separator",
+      role: "none"
+    },
+    {
       label: 'Go to Website',
       click(){
         return shell.openExternal('https://media-bits.web.app')
@@ -86,6 +90,19 @@ app.on('ready', () => {
         app.relaunch()
         return app.quit();
       }
+    },
+    {
+      label: "Check for Updates",
+      click(){
+        return require('update-electron-app')({
+          repo: 'danroyal001/media-bits',
+          logger: require('electron-log')
+        })
+      }
+    },
+    {
+      type: "separator",
+      role: "none"
     },
     {
       label: 'Quit / Exit',
