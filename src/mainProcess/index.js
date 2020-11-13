@@ -40,7 +40,7 @@ const createWindow = () => {
 
   // dist: 5555
   // dev: 8080
-  mainWindow.loadURL("http://localhost:8080/#/editor");
+  mainWindow.loadURL("http://localhost:8080/editor");
   // set id to random float
   const id = (new Date()).getSeconds() + Math.random();
   mainWindow.id = id;
