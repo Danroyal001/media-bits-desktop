@@ -1,8 +1,11 @@
 {
-  "name": "media-bits",
+  "name": "media-bits-desktop",
   "version": "1.0.0",
   "description": "Crossplatform Desktop app for Media-Bits - Next generation media streaming, projection, editing and video conferencing",
-  "author": "danroyal001",
+  "author": {
+    "name": "danroyal001",
+    "email": "danroyaleffiong@gmail.com"
+  },
   "scripts": {
     "lint": "echo \"No linting configured\"",
     "electron": "electron",
@@ -14,6 +17,10 @@
     "start": "electron-forge start"
   },
   "main": "src/mainProcess/index.js",
+  "bin": {
+    "media-bits": "src/mainProcess/index.js",
+    "mb": "src/mainProcess/index.js"
+  },
   "dependencies": {
     "electron-log": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
@@ -40,5 +47,13 @@
     "Stream"
   ],
   "license": "MIT",
-  "productName": "media-bits"
+  "productName": "media-bits",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Danroyal001/media-bits-desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Danroyal001/media-bits-desktop/issues"
+  },
+  "homepage": "https://github.com/Danroyal001/media-bits-desktop#readme"
 }

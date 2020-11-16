@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const { app, BrowserWindow, ipcMain, Tray, Menu, desktopCapturer, shell } = require('electron');
 const path = require('path');
 const minWidth = 1000;
@@ -14,7 +15,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 // handle minimize and maximize
-ipcMain.on('minimize', e => BrowserWindow.fromId(e.sender.id).minimize())
+ipcMain.on('minimize', e => (BrowserWindow.getFocusedWindow() || BrowserWindow.fromId(e.sender.id)).minimize())
 ipcMain.on('maximize', e => {
   const win = BrowserWindow.getFocusedWindow() || BrowserWindow.fromId(e.sender.id)
   if(win.isMaximized()){
