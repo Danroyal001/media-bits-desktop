@@ -35,6 +35,8 @@ const createWindow = () => {
       scrollBounce: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
+      nodeIntegrationInSubFrames: true,
+      nativeWindowOpen: true,
       preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
   });
