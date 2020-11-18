@@ -7,7 +7,7 @@ let appTrayIcon = null;
 const iconPath = path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png');
 const httpServer = require('./http-server');
 
-httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), 5555);
+httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), 4515);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -35,7 +35,7 @@ const createWindow = () => {
       scrollBounce: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-      nodeIntegrationInSubFrames: true,
+      // nodeIntegrationInSubFrames: true,
       nativeWindowOpen: true,
       preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
