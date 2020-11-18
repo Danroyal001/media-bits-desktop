@@ -17,10 +17,6 @@
     "start": "electron-forge start"
   },
   "main": "src/mainProcess/index.js",
-  "bin": {
-    "media-bits": "src/mainProcess/index.js",
-    "mb": "src/mainProcess/index.js"
-  },
   "dependencies": {
     "electron-log": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",

@@ -7,6 +7,74 @@ let appTrayIcon = null;
 const iconPath = path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png');
 const httpServer = require('./http-server');
 
+const toolTip = 'Media-Bits - Next generation media streaming, projection, editing and video conferencing';
+const trayButtons = [
+  {
+    label: "Media-Bits",
+    click(){
+      return BrowserWindow.getAllWindows()[BrowserWindow.getAllWindows().length - 1].focus();
+    }
+  },
+  {
+  label: 'New Window',
+  click(){
+    return createWindow();
+    }
+  },
+  {
+    type: "separator",
+    role: "none"
+  },
+  {
+    label: "Relaunch",
+    click(){
+      app.relaunch()
+      return app.quit();
+    }
+  },
+  {
+    label: "Check for Updates",
+    click(){
+      return require('update-electron-app')({
+        repo: 'danroyal001/media-bits',
+        logger: require('electron-log')
+      })
+    }
+  },
+  {
+    type: "separator",
+    role: "none"
+  },
+  {
+    label: 'Go to Website',
+    click(){
+      return shell.openExternal('https://media-bits.web.app/')
+    }
+  },
+  {
+    label: 'Visit Documentation',
+    click(){
+      return shell.openExternal('https://media-bits.web.app/documentation')
+    }
+  },
+  {
+    label: 'Watch Tutorial Videos',
+    click(){
+      return shell.openExternal('https://media-bits.web.app/tutorial-videos')
+    }
+  },
+  {
+    type: "separator",
+    role: "none"
+  },
+  {
+    label: 'Quit / Exit',
+    click(){
+      app.quit();
+      }
+    }
+];
+
 httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), 4515);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -54,6 +122,8 @@ const createWindow = () => {
   mainWindow.maximize();
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+  // Set Thumbbar buttons on the taskbar thumbnail
+  mainWindow.setThumbarButtons(trayButtons);
   // end open window function
 };
 
@@ -64,57 +134,8 @@ app.on('ready', () => {
   createWindow()
   // add to app tray
   appTrayIcon = new Tray(iconPath);
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: "Media-Bits",
-      click(){
-        return BrowserWindow.getAllWindows()[0].focus();
-      }
-    },
-    {
-    label: 'New Window',
-    click(){
-      return createWindow();
-      }
-    },
-    {
-      type: "separator",
-      role: "none"
-    },
-    {
-      label: 'Go to Website',
-      click(){
-        return shell.openExternal('https://media-bits.web.app')
-      }
-    },
-    {
-      label: "Relaunch",
-      click(){
-        app.relaunch()
-        return app.quit();
-      }
-    },
-    {
-      label: "Check for Updates",
-      click(){
-        return require('update-electron-app')({
-          repo: 'danroyal001/media-bits',
-          logger: require('electron-log')
-        })
-      }
-    },
-    {
-      type: "separator",
-      role: "none"
-    },
-    {
-      label: 'Quit / Exit',
-      click(){
-        app.quit();
-        }
-      }
-  ])
-  appTrayIcon.setToolTip('Media-Bits - Next generation media streaming, projection, editing and video conferencing');
+  const contextMenu = Menu.buildFromTemplate(trayButtons)
+  appTrayIcon.setToolTip(toolTip);
   appTrayIcon.setContextMenu(contextMenu);
   });
 
