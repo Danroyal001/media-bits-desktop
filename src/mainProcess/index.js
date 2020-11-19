@@ -103,7 +103,7 @@ const createWindow = () => {
       scrollBounce: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
-      // nodeIntegrationInSubFrames: true,
+      nodeIntegrationInSubFrames: true,
       nativeWindowOpen: true,
       preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
@@ -113,7 +113,7 @@ const createWindow = () => {
   // dev: 8080
   mainWindow.loadURL("http://localhost:8080/editor");
   // set id to random float
-  const id = (new Date()).getSeconds() + Math.random();
+  const id = (new Date()).getSeconds() + "" + "" + Math.random();
   mainWindow.id = id;
   mainWindow.webContents.id = id;
   mainWindow.menuBarVisible = false;
