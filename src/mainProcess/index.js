@@ -120,10 +120,11 @@ const showSplashScreen = () => {
   splashScreen.setMinimizable(false);
   splashScreen.setMovable(false);
   splashScreen.setHasShadow(true);
-  //splashScreen.setIgnoreMouseEvents(true);
+  splashScreen.setIgnoreMouseEvents(true);
   splashScreen.setAlwaysOnTop(true);
   // Set Thumbbar buttons on the taskbar thumbnail
   splashScreen.setThumbarButtons(trayButtons);
+  splashScreen.isModal(true)
   return splashScreen;
   // end open splash-screen function
 }
