@@ -108,10 +108,10 @@ const showSplashScreen = () => {
     icon: iconPath,
     frame: false
   });
-  splashScreen.loadURL("file:///"+__dirname+"/../../globalAssets/logo.png");
+  splashScreen.loadURL("file:///"+__dirname+"/../globalAssets/splash-screen.png");
   const id = "splash-screen";
   splashScreen.id = id;
-  splashScreen.webContents.id = id;
+  splashScreen.webContents.id = id; 
   splashScreen.menuBarVisible = false;
   splashScreen.setBackgroundColor('#009688');
   splashScreen.setMinimumSize(splashScreenWidth, splashScreenHeight);
@@ -182,7 +182,7 @@ app.on('ready', () => {
     const contextMenu = Menu.buildFromTemplate(trayButtons)
     appTrayIcon.setToolTip(toolTip);
     appTrayIcon.setContextMenu(contextMenu);
-  }, 5000);
+  }, 10000);
   });
 
 // Quit when all windows are closed, except on macOS. There, it's common
