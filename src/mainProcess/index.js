@@ -1,8 +1,12 @@
 #!/usr/bin/env node
-const { app, BrowserWindow, ipcMain, Tray, Menu, desktopCapturer, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, shell } = require('electron');
 const path = require('path');
 const minWidth = 1000;
 const minHeight = 600;
+/**
+   * add to app tray
+   * @type Tray | any
+   * */
 let appTrayIcon = null;
 const iconPath = path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png');
 const httpServer = require('./http-server');
@@ -92,7 +96,45 @@ ipcMain.on('maximize', e => {
   } else win.maximize()
 });
 
+/**
+   * Create the splash screen 
+   * */
+const showSplashScreen = () => {
+  const splashScreenWidth = 550;
+  const splashScreenHeight = 350;
+  const splashScreen = new BrowserWindow({
+    width: splashScreenWidth,
+    height: splashScreenHeight,
+    icon: iconPath,
+    frame: false
+  });
+  splashScreen.loadURL("file:///"+__dirname+"/../../globalAssets/logo.png");
+  const id = "splash-screen";
+  splashScreen.id = id;
+  splashScreen.webContents.id = id;
+  splashScreen.menuBarVisible = false;
+  splashScreen.setBackgroundColor('#009688');
+  splashScreen.setMinimumSize(splashScreenWidth, splashScreenHeight);
+  splashScreen.setMaximumSize(splashScreenWidth, splashScreenHeight);
+  splashScreen.setMaximizable(false);
+  splashScreen.setMinimizable(false);
+  splashScreen.setMovable(false);
+  splashScreen.setHasShadow(true);
+  //splashScreen.setIgnoreMouseEvents(true);
+  splashScreen.setAlwaysOnTop(true);
+  // Set Thumbbar buttons on the taskbar thumbnail
+  splashScreen.setThumbarButtons(trayButtons);
+  return splashScreen;
+  // end open splash-screen function
+}
+
+
+/**
+ * creates a new app window
+ * @param void @type void
+ * */
 const createWindow = () => {
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: minWidth,
@@ -120,6 +162,7 @@ const createWindow = () => {
   mainWindow.setBackgroundColor('#009688');
   mainWindow.setMinimumSize(minWidth, minHeight)
   mainWindow.maximize();
+  mainWindow.setHasShadow(true);
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   // Set Thumbbar buttons on the taskbar thumbnail
@@ -131,12 +174,15 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  createWindow()
-  // add to app tray
-  appTrayIcon = new Tray(iconPath);
-  const contextMenu = Menu.buildFromTemplate(trayButtons)
-  appTrayIcon.setToolTip(toolTip);
-  appTrayIcon.setContextMenu(contextMenu);
+  const splash = showSplashScreen();
+  setTimeout(() => {
+    createWindow();
+    splash.close();
+    appTrayIcon = new Tray(iconPath);
+    const contextMenu = Menu.buildFromTemplate(trayButtons)
+    appTrayIcon.setToolTip(toolTip);
+    appTrayIcon.setContextMenu(contextMenu);
+  }, 5000);
   });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -147,8 +193,8 @@ app.on('window-all-closed', () => {
     if (appTrayIcon) {
       appTrayIcon.destroy()
       appTrayIcon = null;
+      app.quit();
     }
-    app.quit();
   }
 });
 
