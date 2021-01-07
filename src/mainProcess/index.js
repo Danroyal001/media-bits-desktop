@@ -30,6 +30,12 @@ const trayButtons = [
     role: "none"
   },
   {
+    label: "Use Web version",
+    click(){
+      shell.openExternal("https://media-bits.web.app/editor")
+    }
+  },
+  {
     label: "Relaunch",
     click(){
       app.relaunch()

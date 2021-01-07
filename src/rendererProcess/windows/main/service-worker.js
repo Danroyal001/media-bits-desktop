@@ -1,56 +1,34 @@
-var CACHE_NAME = 'MEDIA-BITS-V1';
-var urlsToCache = [ 
-"/", 
-"index.html",
-];
-self.addEventListener('install', function (event) {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(function(cache) {
-        console.log('Opened cache'); 
-       console.log('[MEDIA-BITS]', '👍', 'service  worker installed \n', event);
-        self.skipWaiting();
-        return cache.addAll(urlsToCache);
-      })
-  );
-});
-self.addEventListener('activate', function (event) {
-  console.log('[MEDIA-BITS]', '👷', 'service worker activated \n', event);
-  return self.clients.claim();
-});
-self.addEventListener('message', function (event) {
-  console.log(message);
-});
-self.addEventListener('fetch', function (event) {
- try{
-   console.log('[MEDIA-BITS]', '👷', 'data fetched from service worker \n', event);
-   event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
+/**
+ * Welcome to your Workbox-powered service worker!
+ *
+ * You'll need to register this file in your web app and you should
+ * disable HTTP caching for this file too.
+ * See https://goo.gl/nhQhGp
+ *
+ * The rest of the code is auto-generated. Please don't update this file
+ * directly; instead, make changes to your Workbox build configuration
+ * and re-run your build process.
+ * See https://goo.gl/2aRDsh
+ */
 
-        return fetch(event.request).then(
-          function(response) {
-            // Check if we received a valid response
-            if(!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-            var responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-            return response;
-          }
-        );
-      })
-    );
- }catch{
-   console.log('[MEDIA-BITS]', '😢 fetch error \n', err);
-   event.respondWith("<h1>Internet disconnected</h1>");
- }
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
+
+importScripts(
+  "/precache-manifest.9116a8edd5530dbf351203b698b18f42.js"
+);
+
+workbox.core.setCacheNameDetails({prefix: "media-bits"});
+
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
 });
 
+/**
+ * The workboxSW.precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
