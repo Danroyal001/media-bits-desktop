@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const { app, BrowserWindow, ipcMain, Tray, Menu, shell } = require('electron');
+const { dialog } = require('electron/main');
 const path = require('path');
 const minWidth = 1000;
 const minHeight = 600;
@@ -10,6 +11,16 @@ const minHeight = 600;
 let appTrayIcon = null;
 const iconPath = path.join(__dirname, '..', 'rendererProcess', 'globalAssets', 'logo.png');
 const httpServer = require('./http-server');
+
+const openURL = url => {
+  shell.openExternal(`${url}`)
+      dialog.showMessageBox(BrowserWindow.getFocusedWindow(), {
+        title: "Media-Bits",
+        message: `Launching ${url} in default browser`,
+        buttons: ['Ok'],
+        normalizeAccessKeys: true
+      });
+};
 
 const toolTip = 'Media-Bits - Next generation media streaming, projection, editing and video conferencing';
 const trayButtons = [
@@ -32,7 +43,7 @@ const trayButtons = [
   {
     label: "Use Web version",
     click(){
-      shell.openExternal("https://media-bits.web.app/editor")
+      openURL("https://media-bits.web.app/editor")
     }
   },
   {
@@ -46,7 +57,7 @@ const trayButtons = [
     label: "Check for Updates",
     click(){
       return require('update-electron-app')({
-        repo: 'danroyal001/media-bits',
+        repo: 'danroyal001/media-bits-desktop',
         logger: require('electron-log')
       })
     }
@@ -109,24 +120,26 @@ const showSplashScreen = () => {
   const splashScreenWidth = 550;
   const splashScreenHeight = 350;
   const splashScreen = new BrowserWindow({
+    transparent: true,
     width: splashScreenWidth,
     height: splashScreenHeight,
     icon: iconPath,
-    frame: false
+    frame: false,
+    center: true
   });
-  splashScreen.loadURL("file:///"+__dirname+"/../globalAssets/splash-screen.png");
+  //splashScreen.loadURL("file:///"+__dirname+"/../globalAssets/splash-screen.png");
+  splashScreen.loadURL("file:///"+__dirname+"/../rendererProcess/windows/splashScreen/index.html");
   const id = "splash-screen";
   splashScreen.id = id;
   splashScreen.webContents.id = id; 
   splashScreen.menuBarVisible = false;
-  splashScreen.setBackgroundColor('#009688');
   splashScreen.setMinimumSize(splashScreenWidth, splashScreenHeight);
   splashScreen.setMaximumSize(splashScreenWidth, splashScreenHeight);
   splashScreen.setMaximizable(false);
   splashScreen.setMinimizable(false);
   splashScreen.setMovable(false);
-  splashScreen.setHasShadow(true);
-  splashScreen.setIgnoreMouseEvents(true);
+  //splashScreen.setHasShadow(true);
+  //splashScreen.setIgnoreMouseEvents(true);
   splashScreen.setAlwaysOnTop(true);
   // Set Thumbbar buttons on the taskbar thumbnail
   splashScreen.setThumbarButtons(trayButtons);
@@ -150,6 +163,9 @@ const createWindow = () => {
     frame: false,
     webPreferences: {
       scrollBounce: true,
+      enableWebSQL: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
       nodeIntegrationInSubFrames: true,
@@ -161,8 +177,8 @@ const createWindow = () => {
   // dist: 5555
   // dev: 8080
   mainWindow.loadURL("http://localhost:8080/editor");
-  // set id to random float
-  const id = (new Date()).getSeconds() + "" + "" + Math.random();
+  // set id to random float as string
+  const id = `${(new Date()).getSeconds() + Math.random()}`;
   mainWindow.id = id;
   mainWindow.webContents.id = id;
   mainWindow.menuBarVisible = false;
@@ -180,16 +196,21 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', () => {
+app.whenReady().then(() => {
   const splash = showSplashScreen();
+
   setTimeout(() => {
     createWindow();
-    splash.close();
     appTrayIcon = new Tray(iconPath);
     const contextMenu = Menu.buildFromTemplate(trayButtons)
     appTrayIcon.setToolTip(toolTip);
     appTrayIcon.setContextMenu(contextMenu);
   }, 10000);
+
+  setTimeout(() => {
+    splash.close();
+  }, 13000);
+
   });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -201,6 +222,7 @@ app.on('window-all-closed', () => {
       appTrayIcon.destroy()
       appTrayIcon = null;
       app.quit();
+      return process.exit(0);
     }
   }
 });
