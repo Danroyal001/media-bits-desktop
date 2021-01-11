@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["privacy-policy"],{"729e":function(c,e,n){"use strict";n.r(e);var i=n("7a23");function r(c,e,n,r,a,p){return Object(i["t"])(),Object(i["f"])("div")}var a={name:"privacy-policy"};a.render=r;e["default"]=a}}]);
+//# sourceMappingURL=privacy-policy.672d5abf.js.map

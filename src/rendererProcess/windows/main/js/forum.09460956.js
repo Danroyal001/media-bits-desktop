@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["forum"],{5916:function(n,e,r){"use strict";r.r(e);var t=r("7a23");function o(n,e,r,o,u,a){return Object(t["t"])(),Object(t["f"])("div")}var u={name:"forum"};u.render=o;e["default"]=u}}]);
+//# sourceMappingURL=forum.09460956.js.map

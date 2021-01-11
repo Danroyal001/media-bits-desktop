@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["contact"],{"0abc":function(n,t,e){"use strict";e.r(t);var c=e("7a23"),o=Object(c["j"])("div",{class:"container"},[Object(c["j"])("form")],-1);function a(n,t,e,a,r,b){var i=Object(c["A"])("FooterComponent");return Object(c["t"])(),Object(c["f"])("div",null,[o,Object(c["j"])(i)])}var r=e("e741"),b=Object(c["l"])({name:"contact-page",data:function(){return{name:"",email:"",company:""}},components:{FooterComponent:r["a"]}});b.render=a;t["default"]=b}}]);
+//# sourceMappingURL=contact.82f95efd.js.map
