@@ -1,5 +1,5 @@
 :root{
-    --primary-color: #009688;
+    --primary-color: #434a5f;
 }
 
 *{
@@ -23,6 +23,7 @@ html, body{
 }
 
 .center-of-attraction{
+    transform: translate3d(0px, 0px, 50px);
     box-shadow: 1px 1px 2px 2px;
     background-color: var(--primary-color);
     width: 400px !important;

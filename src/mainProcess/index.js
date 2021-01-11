@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { app, BrowserWindow, ipcMain, Tray, Menu, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, Tray, Menu, shell, Notification } = require('electron');
 const { dialog } = require('electron/main');
 const path = require('path');
 const minWidth = 1000;
@@ -182,15 +182,29 @@ const createWindow = () => {
   mainWindow.id = id;
   mainWindow.webContents.id = id;
   mainWindow.menuBarVisible = false;
-  mainWindow.setBackgroundColor('#009688');
+  mainWindow.setBackgroundColor('#434a5f');
   mainWindow.setMinimumSize(minWidth, minHeight)
   mainWindow.maximize();
   mainWindow.setHasShadow(true);
+  mainWindow.on('close', () => {
+    if (BrowserWindow.getAllWindows().length === 1) {
+
+      const notificationTitle = "Media-Bits background process";
+      const notif = new Notification({
+        title: notificationTitle,
+        body: "Media-Bits will remain quiet in the background till when you need it again",
+        actions: []
+      });
+      notif.on('click', e => console.log(e));
+    
+    }
+  });
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
   // Set Thumbbar buttons on the taskbar thumbnail
   mainWindow.setThumbarButtons(trayButtons);
-  // end open window function
+  // end open window function and return the new window as a value
+  return mainWindow;
 };
 
 // This method will be called when Electron has finished
@@ -211,24 +225,34 @@ app.whenReady().then(() => {
     splash.close();
   }, 13000);
 
+  const cmdArgs = process.argv.slice(2);
+  console.log(cmdArgs);
+
   });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    if (appTrayIcon) {
-      appTrayIcon.destroy()
-      appTrayIcon = null;
-      app.quit();
-      return process.exit(0);
-    }
-  }
+
+  const notificationTitle = "Media-Bits background process";
+  const notif = new Notification({
+    title: notificationTitle,
+    body: "Media-Bits will remain quiet in the background till when you need it again",
+    actions: []
+  });
+  notif.on('click', e => console.log(e));
+
+});
+
+app.on('quit', () => {
+  appTrayIcon.destroy();
+  appTrayIcon = null;
+  process.exit(0);
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
+  // Re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
