@@ -12,22 +12,29 @@ module.exports = exports = {
       {
         name: "@electron-forge/maker-squirrel",
         config: {
-          name: "media_bits"
+          name: "media_bits-desktop"
         }
       },
       {
         name: "@electron-forge/maker-zip",
         platforms: [
           "darwin"
-        ]
+        ],
+        config: {
+          name: "media_bits-desktop"
+        }
       },
       {
         name: "@electron-forge/maker-deb",
-        config: {}
+        config: {
+          name: "media_bits-desktop"
+        }
       },
       {
         name: "@electron-forge/maker-rpm",
-        config: {}
+        config: {
+          name: "media_bits-desktop"
+        }
       }
     ]
   };

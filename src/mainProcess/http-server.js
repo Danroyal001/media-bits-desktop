@@ -1,14 +1,15 @@
-module.exports = exports = (_path, _port) => {
+module.exports = exports = exports.default = (_path, _port, _hostName) => {
 
     _port = _port || process.env.PORT || 8085;
     
     _port = parseInt(_port, 10);
     
     const http = require('http');
+    http.globalAgent.maxSockets = Infinity;
     const fs = require('fs');
     const path = require('path');
     http.createServer(function (req, res) {
-    console.log('req ', req.url);
+    console.log('req:',req.method, ':',  req.url);
     let filePath = _path + req.url;
     if (req.url == '/')
      filePath = _path + '/index.html';
@@ -35,11 +36,13 @@ module.exports = exports = (_path, _port) => {
     fs.readFile(filePath, function(error, content) {
      if (error) {
      if(error.code == 'ENOENT'){
-     res.writeHead(404, {
-         'Content-Type': 'text/plain',
+      filePath = _path + '/index.html';
+     res.writeHead(200, {
+         'Content-Type': 'text/html',
          'Access-Control-Allow-Origin': '*'
         });
-     res.write('404 - not found')
+     res.write(Buffer.from(fs.readFileSync(filePath)));
+     res.end()
      }
      else {
      res.writeHead(500, {
@@ -57,8 +60,8 @@ module.exports = exports = (_path, _port) => {
      res.end();
      }
     });
-    }).listen(_port, '127.0.0.1', ()=>console.log(`Server running at http://127.0.0.1:${_port}/`));
+    }).listen(_port, _hostName, () => console.log(`Local server: Running at http://${_hostName}:${_port}/`));
     
-    return 0;
+    return _port;
     
     };

@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.1bf79be8a4b075e3f59276b6ae83dcfc.js"
+  "/precache-manifest.7a4a5599c68b81daeb95fa31e92b33d1.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "media-bits"});

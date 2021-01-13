@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 const { app, BrowserWindow, ipcMain, Tray, Menu, shell, Notification } = require('electron');
-const { dialog } = require('electron/main');
+const { dialog, protocol } = require('electron/main');
 const path = require('path');
+const http = require('http');
 const minWidth = 1000;
 const minHeight = 600;
 /**
@@ -22,12 +23,52 @@ const openURL = url => {
       });
 };
 
+
+// start local server on any available port
+let serverPort = 8080;
+const serverHostName = '127.0.0.1';
+const checkServerPortAvailability = async () => {
+  const tempServer = http.createServer(() => {});
+  tempServer.on('error', (e) => {
+    if ((e.code === 'EADDRINUSE') || (e.name === 'EADDRINUSE') || (e.stack === 'EADDRINUSE') || (e.message === 'EADDRINUSE')) {
+      console.error(`Server error: http://${serverHostName}:${serverPort} is taken`);
+      ++serverPort;
+    } else {
+        return checkServerPortAvailability();
+      }
+
+    return checkServerPortAvailability();
+  });
+
+  return tempServer.listen(serverPort, serverHostName, () => {
+    tempServer.close(() => {
+          serverPort = httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), serverPort, serverHostName);
+          // return protocol.registerHttpProtocol(
+          //   "media-bits", 
+          //   (request, callback) => {
+          //     const url = `http://${serverHostName}:${serverPort}/${request.url.substr(13)}`;
+          //     const method = request.method;
+          //     callback({
+          //       url,
+          //       method,
+          //     })
+          //   }
+          // );
+        }
+      );
+    });
+};
+checkServerPortAvailability();
+
+
 const toolTip = 'Media-Bits - Next generation media streaming, projection, editing and video conferencing';
 const trayButtons = [
   {
     label: "Media-Bits",
     click(){
-      return BrowserWindow.getAllWindows()[BrowserWindow.getAllWindows().length - 1].focus();
+      const windows = BrowserWindow.getAllWindows();
+      if (windows.length) windows[windows.length - 1].focus();
+      else createWindow();
     }
   },
   {
@@ -43,8 +84,17 @@ const trayButtons = [
   {
     label: "Use Web version",
     click(){
-      openURL("https://media-bits.web.app/editor")
+      return openURL("https://media-bits.web.app/editor")
     }
+  },{
+    label: "Local/Offline collaboration",
+    click(){
+      return openURL(`http://127.0.0.1:${serverPort}/editor`);
+    }
+  },
+  {
+    type: "separator",
+    role: "none"
   },
   {
     label: "Relaunch",
@@ -95,8 +145,6 @@ const trayButtons = [
       }
     }
 ];
-
-httpServer(path.join(__dirname, '..','rendererProcess','windows','main'), 4515);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -168,20 +216,22 @@ const createWindow = () => {
       enableRemoteModule: true,
       nodeIntegration: true,
       nodeIntegrationInWorker: true,
+      allowRunningInsecureContent: true,
       nodeIntegrationInSubFrames: true,
       nativeWindowOpen: true,
       preload: path.join(__dirname, '..', 'rendererProcess', 'preload', 'index.js')
     }
   });
 
-  // dist: 5555
-  // dev: 8080
-  mainWindow.loadURL("http://localhost:8080/editor");
+  // dist: http://localhost:${serverPort}/editor
+  // dev: http://localhost:8080/editor
+  mainWindow.loadURL(`http://localhost:8080/editor`);
   // set id to random float as string
   const id = `${(new Date()).getSeconds() + Math.random()}`;
   mainWindow.id = id;
   mainWindow.webContents.id = id;
   mainWindow.menuBarVisible = false;
+  mainWindow.setDocumentEdited(true);
   mainWindow.setBackgroundColor('#434a5f');
   mainWindow.setMinimumSize(minWidth, minHeight)
   mainWindow.maximize();
@@ -189,17 +239,18 @@ const createWindow = () => {
   mainWindow.on('close', () => {
     if (BrowserWindow.getAllWindows().length === 1) {
 
-      const notificationTitle = "Media-Bits background process";
+      const notificationTitle = "Media-Bits";
       const notif = new Notification({
         title: notificationTitle,
+        subtitle: "Background Process",
         body: "Media-Bits will remain quiet in the background till when you need it again",
-        actions: []
+        actions: ['Ok']
       });
       notif.on('click', e => console.log(e));
     
     }
   });
-  // Open the DevTools.
+  // Dev: Open the DevTools.
   mainWindow.webContents.openDevTools();
   // Set Thumbbar buttons on the taskbar thumbnail
   mainWindow.setThumbarButtons(trayButtons);
@@ -227,6 +278,7 @@ app.whenReady().then(() => {
 
   const cmdArgs = process.argv.slice(2);
   console.log(cmdArgs);
+  console.log(process.argv)//this is only needed for debugging i
 
   });
 

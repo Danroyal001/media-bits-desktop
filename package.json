@@ -18,6 +18,7 @@
   },
   "main": "src/mainProcess/index.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "electron-log": "^4.3.0",
     "electron-squirrel-startup": "^1.0.0",
     "update-electron-app": "^2.0.1"
